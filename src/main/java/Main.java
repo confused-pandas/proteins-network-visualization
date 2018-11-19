@@ -10,8 +10,10 @@ public class Main {
         File p = new File("./graph.db");
         GraphDatabaseService db = dbFactory.newEmbeddedDatabase(p);
 
+        System.out.println("ça marche!!!!!");
         try (Transaction tx = db.beginTx()) {
             // Perform DB operations
+            System.out.println("ça marche 2");
             tx.success();
         }
     }
