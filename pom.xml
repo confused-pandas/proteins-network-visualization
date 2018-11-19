@@ -7,7 +7,42 @@
     <groupId>com.nosql.maven</groupId>
     <artifactId>ProjetNoSql</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
+    <properties>
+        <!-- to be overridden in sub modules -->
+        <java-module-name></java-module-name>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <commonslang>3.4</commonslang>
+        <commonsio>2.4</commonsio>
+        <jackson>2.8.11</jackson>
+        <httpclient>4.5.2</httpclient>
+        <junit>4.12</junit>
+        <assertj>3.8.0</assertj>
+        <slf4j>1.7.21</slf4j>
+        <logback>1.1.7</logback>
+        <mockito>2.2.29</mockito>
+        <!-- default for build, if no profiles invoked -->
+        <neo4j>3.4.9</neo4j>
+        <bolt>1.6.3</bolt>
+        <fast.classpath.scanner>2.18.1</fast.classpath.scanner>
+        <ogm.properties>ogm-bolt.properties</ogm.properties>
+        <neo4j.edition>enterprise</neo4j.edition>
+        <spotbugs.plugin.version>3.1.3</spotbugs.plugin.version>
+    </properties>
 
 
     <dependencies>
@@ -84,6 +119,13 @@
             <artifactId>neo4j-enterprise</artifactId>
             <version>${neo4j}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-graphdb-api -->
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-graphdb-api</artifactId>
+            <version>3.4.9</version>
         </dependency>
 
 
