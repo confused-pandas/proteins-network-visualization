@@ -9,88 +9,86 @@
     <version>1.0-SNAPSHOT</version>
 
 
-    <dependencyManagement>
 
-        <dependencies>
+    <dependencies>
 
-            <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-kernel -->
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-kernel</artifactId>
-                <version>3.4.9</version>
-            </dependency>
+        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-kernel -->
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-kernel</artifactId>
+            <version>3.4.9</version>
+        </dependency>
 
-            <!--Compile and Runtime Dependencies -->
-            <dependency>
-                <groupId>org.neo4j.driver</groupId>
-                <artifactId>neo4j-java-driver</artifactId>
-                <version>${bolt}</version>
-            </dependency>
+        <!--Compile and Runtime Dependencies -->
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>${bolt}</version>
+        </dependency>
 
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson}</version>
-            </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson}</version>
+        </dependency>
 
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient}</version>
+        </dependency>
 
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j}</version>
+        </dependency>
 
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commonslang}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commonslang}</version>
+        </dependency>
 
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commonsio}</version>
-            </dependency>
-
-
-            <!-- Embedded Driver Dependencies -->
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j</artifactId>
-                <version>${neo4j}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-cluster</artifactId>
-                <version>${neo4j}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-ha</artifactId>
-                <version>${neo4j}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-enterprise</artifactId>
-                <version>${neo4j}</version>
-                <scope>provided</scope>
-            </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commonsio}</version>
+        </dependency>
 
 
-        </dependencies>
+        <!-- Embedded Driver Dependencies -->
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j</artifactId>
+            <version>${neo4j}</version>
+            <scope>provided</scope>
+        </dependency>
 
-    </dependencyManagement>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-cluster</artifactId>
+            <version>${neo4j}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ha</artifactId>
+            <version>${neo4j}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-enterprise</artifactId>
+            <version>${neo4j}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+    </dependencies>
+
 
 
 </project>

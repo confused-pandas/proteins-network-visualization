@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: commons-io:commons-io:${commonsio}">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/${commonsio}/commons-io-${commonsio}.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/${commonsio}/commons-io-${commonsio}-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/${commonsio}/commons-io-${commonsio}-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
