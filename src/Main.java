@@ -16,7 +16,9 @@ public class Main {
 		
 		try ( Transaction tx = graphDb.beginTx() )
         {
-            // Database operations go here
+            
+			/*
+			// Database operations go here
 			Map<String, Object> params = new HashMap<>();
 			String query = "MATCH (n:Protein) RETURN n.id;";
 			Result result = graphDb.execute(query, params);
@@ -26,7 +28,29 @@ public class Main {
 				Map<String, Object> row = result.next();
 				System.out.println(row.get("n.id"));
 			}
+						
+			// GET EC						
+			Map<String, Object> params = new HashMap<>();
+			String query = "MATCH (n:Protein) RETURN n.ec;";
+			Result result = graphDb.execute(query, params);
+			System.out.println(result);
 		
+			while(result.hasNext()) {
+				Map<String, Object> row = result.next();
+				System.out.println(row.get("n.ec"));
+			}
+			*/
+			
+			// GET DOMAINS
+			Map<String, Object> params = new HashMap<>();
+			String query = "MATCH (n:Protein) RETURN n.domains;";
+			Result result = graphDb.execute(query, params);
+			System.out.println(result);
+		
+			while(result.hasNext()) {
+				Map<String, Object> row = result.next();
+				System.out.println(row.get("n.domains"));
+			}
 			
 			
             tx.success();
