@@ -53,6 +53,9 @@ public class Main extends Application {
 		GraphDatabaseService graphDb = dbFactory.newEmbeddedDatabase( new File("C:\\neo4j\\data\\databases\\graph.db") );
 		
 		ObservableList<String> statList = FXCollections.observableArrayList();
+		ObservableList<String> ecList = FXCollections.observableArrayList();
+		ObservableList<String> domainsList = FXCollections.observableArrayList();
+		ObservableList<String> neighbourList = FXCollections.observableArrayList();
 		
 		String avgJaccard;
 		String minJaccard;
@@ -61,6 +64,9 @@ public class Main extends Application {
 		String avgDomains;
 		String avgEc;
 		
+		ecList = Main.getEC(graphDb);
+		domainsList = Main.getDomains(graphDb);
+		neighbourList = Main.getNeighbour(graphDb);
 		avgJaccard = Main.getAvgJaccard(graphDb);
 		minJaccard = Main.getMinJaccard(graphDb);
 		maxJaccard = Main.getMaxJaccard(graphDb);
@@ -92,9 +98,79 @@ public class Main extends Application {
 		for (int i = 0; i<5; i++) {
 			items.add("test");
 		}
-		ecnumbers.setItems(items);
+		ecnumbers.setItems(ecList);
+		domains.setItems(domainsList);
+		neighbours.setItems(neighbourList);
 		stats.setItems(statList);
+		
 	}
+	
+	private static ObservableList<String> getEC(GraphDatabaseService graphDb) throws  IOException{
+		
+		try ( Transaction tx = graphDb.beginTx() ) {
+		
+		ObservableList<String> ecList = FXCollections.observableArrayList();
+		Map<String, Object> params = new HashMap<>();
+		String query = "MATCH (p:Protein) where p.id = \"O41798\" return p.ec";
+		Result result = graphDb.execute(query, params);
+		while(result.hasNext()) {
+			Map<String, Object> row = result.next();
+			String[] parts = concatFromArray(((String[]) row.get("p.ec"))).split(";");
+			for (String part : parts) {
+				ecList.add(part);
+			}
+			
+		}
+		
+		tx.success();
+		
+		return ecList;
+        }
+	}
+	
+	private static ObservableList<String> getDomains(GraphDatabaseService graphDb) throws  IOException{
+		
+		try ( Transaction tx = graphDb.beginTx() ) {
+		
+		ObservableList<String> domainsList = FXCollections.observableArrayList();
+		Map<String, Object> params = new HashMap<>();
+		String query = "MATCH (p:Protein) where p.id = \"O41798\" return p.domains";
+		Result result = graphDb.execute(query, params);
+		while(result.hasNext()) {
+			Map<String, Object> row = result.next();
+			String[] parts = concatFromArray(((String[]) row.get("p.domains"))).split(";");
+			for (String part : parts) {
+				domainsList.add(part);
+			}
+			
+		}
+		
+		tx.success();
+		
+		return domainsList;
+        }
+	}
+	
+	private static ObservableList<String> getNeighbour(GraphDatabaseService graphDb) throws  IOException{
+		
+		try ( Transaction tx = graphDb.beginTx() ) {
+		
+		ObservableList<String> neighbourList = FXCollections.observableArrayList();
+		Map<String, Object> params = new HashMap<>();
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \"P08393\" return p2.id";
+		Result result = graphDb.execute(query, params);
+		while(result.hasNext()) {
+			Map<String, Object> row = result.next();
+			neighbourList.add(row.get("p2.id").toString());
+			
+		}
+		
+		tx.success();
+		
+		return neighbourList;
+        }
+	}
+			
 
 	private static String getAvgJaccard(GraphDatabaseService graphDb) throws  IOException{
 		
@@ -281,7 +357,7 @@ public class Main extends Application {
 		}
 		String result="";
 		for (String i : a) {
-			result += i + " ";
+			result += i + ";";
 		}
 		return result;
 	}
