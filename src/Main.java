@@ -1,10 +1,13 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,6 +55,12 @@ public class Main extends Application {
 		Main.rr(graphDb);
 
 		graphDb.shutdown();
+
+		ObservableList<String> items = FXCollections.observableArrayList();
+		for (int i = 0; i<5; i++) {
+			items.add("test");
+		}
+		ecnumbers.setItems(items);
 	}
 
 	private static void rr(GraphDatabaseService graphDb) throws  IOException{
