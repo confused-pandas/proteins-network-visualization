@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -38,6 +39,8 @@ public class Main extends Application {
 	private ListView neighbours;
 	@FXML
 	private ListView stats;
+	@FXML
+    private Slider jaccardCursor;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -97,10 +100,7 @@ public class Main extends Application {
 
 		graphDb.shutdown();
 
-		ObservableList<String> items = FXCollections.observableArrayList();
-		for (int i = 0; i<5; i++) {
-			items.add("test");
-		}
+
 		ecnumbers.setItems(ecList);
 		domains.setItems(domainsList);
 		neighbours.setItems(neighbourList);
@@ -160,7 +160,7 @@ public class Main extends Application {
 		
 		ObservableList<String> neighbourList = FXCollections.observableArrayList();
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return p2.id";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return p2.id";
 		Result result = graphDb.execute(query, params);
 		while(result.hasNext()) {
 			Map<String, Object> row = result.next();
@@ -181,7 +181,7 @@ public class Main extends Application {
 		
 		String avgJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return avg(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return avg(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -203,7 +203,7 @@ public class Main extends Application {
 		
 		String minJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return min(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return min(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -224,7 +224,7 @@ public class Main extends Application {
 		
 		String maxJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return max(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return max(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -245,7 +245,7 @@ public class Main extends Application {
 		
 		String nbNeighbour = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return count(p)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return count(p)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -266,7 +266,7 @@ public class Main extends Application {
 		
 		String avgDomains = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return avg(size(p2.domains))";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return avg(size(p2.domains))";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -287,7 +287,7 @@ public class Main extends Application {
 		
 		String avgEc = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" return avg(size(p2.ec))";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return avg(size(p2.ec))";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
