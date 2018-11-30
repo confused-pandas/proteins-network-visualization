@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		GraphDatabaseFactory dbFactory = new GraphDatabaseFactory();
-		GraphDatabaseService graphDb = dbFactory.newEmbeddedDatabase( new File("/Users/aghenda1u/Downloads/neo4j-community-3.4.10/data/databases/graph.db") );
+		GraphDatabaseService graphDb = dbFactory.newEmbeddedDatabase( new File("/home/etudiants/aghenda1u/Documents/NoSQL/neo4j-community-3.4.10/data/databases/graph.db") );
 		
 		try ( Transaction tx = graphDb.beginTx() )
         {
@@ -43,14 +43,25 @@ public class Main {
 			*/
 			
 			// GET EC
-			Map<String, Object> params = new HashMap<>();
-			String query = "MATCH (n:Protein) RETURN n.goterms;";
+			/*Map<String, Object> params = new HashMap<>();
+			String query = "MATCH (p:Protein) RETURN p.domains;";
 			Result result = graphDb.execute(query, params);
-			System.out.println(result);
+			System.out.println(result);		
 		
 			while(result.hasNext()) {
 				Map<String, Object> row = result.next();
-				System.out.println(concatFromArray(((String[]) row.get("n.goterms"))));
+				System.out.println(concatFromArray(((String[]) row.get("p.domains"))));
+			}*/
+			
+			
+			Map<String, Object> params = new HashMap<>();
+			String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \"P08393\" return p,r,p2.id";
+			Result result = graphDb.execute(query, params);
+			System.out.println(result);		
+		
+			while(result.hasNext()) {
+				Map<String, Object> row = result.next();
+				System.out.println(row.get("p2.id"));
 			}
 			
 			
