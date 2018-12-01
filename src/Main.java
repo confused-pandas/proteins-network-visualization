@@ -30,15 +30,15 @@ public class Main extends Application {
 	@FXML
 	private TextField protID;
 	@FXML
-	private ListView ecnumbers;
+	private ListView<String> ecnumbers;
 	@FXML
-	private ListView goterms;
+	private ListView<String> goterms;
 	@FXML
-	private ListView domains;
+	private ListView<String> domains;
 	@FXML
-	private ListView neighbours;
+	private ListView<String> neighbours;
 	@FXML
-	private ListView stats;
+	private ListView<String> stats;
 	@FXML
     private Slider jaccardCursor;
 
@@ -56,6 +56,7 @@ public class Main extends Application {
 		GraphDatabaseService graphDb = dbFactory.newEmbeddedDatabase( new File("C:\\neo4j\\data\\databases\\graph.db") );
 		
 		String proteinID = protID.getText();
+		String jaccardValue = String.valueOf(jaccardCursor.getValue());
 		
 		ObservableList<String> statList = FXCollections.observableArrayList();
 		ObservableList<String> ecList = FXCollections.observableArrayList();
@@ -71,13 +72,13 @@ public class Main extends Application {
 		
 		ecList = Main.getEC(graphDb, proteinID);
 		domainsList = Main.getDomains(graphDb, proteinID);
-		neighbourList = Main.getNeighbour(graphDb, proteinID);
-		avgJaccard = Main.getAvgJaccard(graphDb, proteinID);
-		minJaccard = Main.getMinJaccard(graphDb, proteinID);
-		maxJaccard = Main.getMaxJaccard(graphDb, proteinID);
-		nbNeighbour = Main.getNbNeighbour(graphDb, proteinID);
-		avgDomains = Main.getAvgDomains(graphDb, proteinID);
-		avgEc = Main.getAvgEc(graphDb, proteinID);
+		neighbourList = Main.getNeighbour(graphDb, proteinID, jaccardValue);
+		avgJaccard = Main.getAvgJaccard(graphDb, proteinID, jaccardValue);
+		minJaccard = Main.getMinJaccard(graphDb, proteinID, jaccardValue);
+		maxJaccard = Main.getMaxJaccard(graphDb, proteinID, jaccardValue);
+		nbNeighbour = Main.getNbNeighbour(graphDb, proteinID, jaccardValue);
+		avgDomains = Main.getAvgDomains(graphDb, proteinID, jaccardValue);
+		avgEc = Main.getAvgEc(graphDb, proteinID, jaccardValue);
 		
 		statList.add("Average Jaccard Coefficient");
 		statList.add("---| "+avgJaccard);
@@ -154,13 +155,13 @@ public class Main extends Application {
         }
 	}
 	
-	private static ObservableList<String> getNeighbour(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static ObservableList<String> getNeighbour(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		ObservableList<String> neighbourList = FXCollections.observableArrayList();
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return p2.id";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return p2.id";
 		Result result = graphDb.execute(query, params);
 		while(result.hasNext()) {
 			Map<String, Object> row = result.next();
@@ -175,13 +176,13 @@ public class Main extends Application {
 	}
 			
 
-	private static String getAvgJaccard(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static String getAvgJaccard(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		String avgJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return avg(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -197,13 +198,13 @@ public class Main extends Application {
 	}
 	
 	
-	private static String getMinJaccard(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static String getMinJaccard(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		String minJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return min(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return min(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -218,13 +219,13 @@ public class Main extends Application {
 			
 	}
 	
-	private static String getMaxJaccard(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static String getMaxJaccard(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		String maxJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return max(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return max(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -239,13 +240,13 @@ public class Main extends Application {
 			
 	}
 	
-	private static String getNbNeighbour(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static String getNbNeighbour(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		String nbNeighbour = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return count(p)";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return count(p)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -260,13 +261,13 @@ public class Main extends Application {
 			
 	}
 	
-	private static String getAvgDomains(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static String getAvgDomains(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		String avgDomains = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return avg(size(p2.domains))";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(size(p2.domains))";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -281,13 +282,13 @@ public class Main extends Application {
 			
 	}
 	
-	private static String getAvgEc(GraphDatabaseService graphDb, String proteinID) throws  IOException{
+	private static String getAvgEc(GraphDatabaseService graphDb, String proteinID, String jaccardValue) throws  IOException{
 		
 		try ( Transaction tx = graphDb.beginTx() ) {
 		
 		String avgEc = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" return avg(size(p2.ec))";
+		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(size(p2.ec))";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {

@@ -47,8 +47,8 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Slider fx:id="jaccardCursor" blockIncrement="0.1" layoutX="375.0" layoutY="145.0" majorTickUnit="0.1" max="1.0" minorTickCount="1" prefHeight="37.0" prefWidth="230.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" style="-fx-background-color: #3f7283;" />
-      <Label layoutX="294.0" layoutY="137.0" text="Jaccard" textFill="WHITE">
+      <Slider fx:id="jaccardCursor" blockIncrement="0.1" layoutX="375.0" layoutY="145.0" majorTickUnit="0.1" max="1.0" minorTickCount="1" prefHeight="39.0" prefWidth="229.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" style="-fx-background-color: #3f7283;" />
+      <Label layoutX="249.0" layoutY="137.0" text="Jaccard Index" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
