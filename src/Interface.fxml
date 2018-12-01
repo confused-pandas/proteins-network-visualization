@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #3c6879;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="945.0" style="-fx-background-color: #3c6879;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
    <children>
       <Label layoutX="294.0" layoutY="37.0" opacity="0.83" text="Enter a protein ID" textFill="WHITE">
          <font>
@@ -36,7 +36,7 @@
          </font>
       </Label>
       <ListView fx:id="neighbours" layoutX="232.0" layoutY="210.0" opacity="0.29" prefHeight="377.0" prefWidth="426.0" style="-fx-background-color: #a4d5e3; -fx-background-radius: 5px;" />
-      <ListView fx:id="stats" layoutX="676.0" layoutY="210.0" opacity="0.5" prefHeight="377.0" prefWidth="200.0" style="-fx-background-color: #a4d5e3; -fx-background-radius: 5px;" />
+      <ListView fx:id="stats" layoutX="676.0" layoutY="210.0" opacity="0.5" prefHeight="377.0" prefWidth="260.0" style="-fx-background-color: #a4d5e3; -fx-background-radius: 5px;" />
       <Label layoutX="232.0" layoutY="183.0" text="Neighbour Proteins ID" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />

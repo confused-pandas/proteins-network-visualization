@@ -46,7 +46,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception{
 		root = FXMLLoader.load(getClass().getResource("Interface.fxml"));
 		primaryStage.setTitle("Neo4Prot");
-		primaryStage.setScene(new Scene(root, 900, 600));
+		primaryStage.setScene(new Scene(root, 945, 600));
 		primaryStage.show();
 	}
 
@@ -97,16 +97,16 @@ public class Main extends Application {
 		statList.add("");
 		statList.add("Average number of EC");
 		statList.add("---| "+avgEc);
-		
 
-		graphDb.shutdown();
 
 
 		ecnumbers.setItems(ecList);
 		domains.setItems(domainsList);
 		neighbours.setItems(neighbourList);
 		stats.setItems(statList);
-		
+
+
+        graphDb.shutdown();
 	}
 	
 	private static ObservableList<String> getEC(GraphDatabaseService graphDb, String proteinID) throws  IOException{
@@ -161,7 +161,7 @@ public class Main extends Application {
 		
 		ObservableList<String> neighbourList = FXCollections.observableArrayList();
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return p2.id";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return p2.id";
 		Result result = graphDb.execute(query, params);
 		while(result.hasNext()) {
 			Map<String, Object> row = result.next();
@@ -182,7 +182,7 @@ public class Main extends Application {
 		
 		String avgJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -204,7 +204,7 @@ public class Main extends Application {
 		
 		String minJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return min(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return min(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -225,7 +225,7 @@ public class Main extends Application {
 		
 		String maxJaccard = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return max(r.jaccard)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return max(r.jaccard)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -246,7 +246,7 @@ public class Main extends Application {
 		
 		String nbNeighbour = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return count(p)";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return count(p)";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -267,7 +267,7 @@ public class Main extends Application {
 		
 		String avgDomains = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(size(p2.domains))";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(size(p2.domains))";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
@@ -288,7 +288,7 @@ public class Main extends Application {
 		
 		String avgEc = "0";
 		Map<String, Object> params = new HashMap<>();
-		String query = "MATCH (p:Protein)-[r:weight]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(size(p2.ec))";
+		String query = "MATCH (p:Protein)-[r:linkedTo]-(p2) where p.id = \""+proteinID+"\" and r.jaccard > "+jaccardValue+" return avg(size(p2.ec))";
 		Result result = graphDb.execute(query, params);
 		
 		while(result.hasNext()) {
