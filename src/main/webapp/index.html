@@ -1,0 +1,244 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">
+    <title>Neo4j Proteins</title>
+</head>
+
+<body>
+<div id="graph">
+</div>
+<div role="navigation" class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <form role="search" class="navbar-form" id="search">
+                            <div class="form-group">
+                                <input type="text" value="Q8QME4" placeholder="Search for Protein Identifier" class="form-control" name="search">
+                            </div>
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-header col-sm-6 col-md-6">
+                <div class="logo-well">
+                    <a href="http://neo4j.com/developer-resources">
+                    <img src="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/img/logo-white.svg" alt="Neo4j World's Leading Graph Database" id="logo">
+                    </a>
+                </div>
+                <div class="navbar-brand">
+                    <div class="brand">Neo4j Proteins</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading" id="title">Protein Details</div>
+            <div class="row">
+                <div class="col-md-3 col-sm-3">
+                    <h4>Domains</h4>
+                    <ul id="domains">
+                    </ul>
+                </div>
+				<div class="col-md-3 col-sm-3">
+                    <h4>EC</h4>
+                    <ul id="ec">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="col-md-6">
+    </div>
+	<div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">Jaccard Index Statistics</div>
+            <table id="jaccard" class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Average Jaccard Index</th>
+                    <th>Min Jaccard Index</th>
+                    <th>Max Jaccard Index</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+	<div class="col-md-6">
+    </div>
+	<div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">General Neighbour Statistics</div>
+            <table id="general" class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Number of neighbour</th>
+                    <th>Average number of domains</th>
+                    <th>Average number of EC</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+.link {
+  stroke: #aaa;
+}
+
+.node text {
+stroke:#333;
+cursos:pointer;
+font-size: 8px;
+}
+
+.node.domains circle{
+stroke-width:3px;
+fill:#66b245;
+}
+
+.node.protein circle{
+stroke-width:3px;
+fill:#008cc1;
+}
+</style>
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        function showProtein(id) {
+            $.get("/protein/" + encodeURIComponent(id),
+                    function (data) {
+                        if (!data) return;
+                        $("#id").text(data.id);
+                        var $list = $("#domains").empty();
+                        data.prot.forEach(function (prot) {
+                            //$list.append($("<li>" + prot.id + "</li>"));
+							//$list.append($("<li>" + prot.ec[0] + "</li>"));
+							for (var prop in prot.domains) {
+								$list.append($("<li>" + prot.domains[prop] + "</li>"));
+							}
+                        });
+						var $list = $("#ec").empty();
+                        data.prot.forEach(function (prot) {
+                            //$list.append($("<li>" + prot.id + "</li>"));
+							//$list.append($("<li>" + prot.ec[0] + "</li>"));
+							for (var prop in prot.ec) {
+								$list.append($("<li>" + prot.ec[prop] + "</li>"));
+							}
+                        });
+                    }, "json");
+            return false;
+        }
+		function showGraph(id) {
+            $.get("/graph/" + encodeURIComponent(id),
+                    function (data) {
+                        if (!data) return;
+                        $("#id").text(data.id);
+                    }, "json");
+			d3.select("svg").remove();
+					
+			var width = 800, height = 800;
+
+			var svg = d3.select("#graph").append("svg")
+					.attr("width", "100%").attr("height", "100%")
+					.attr("pointer-events", "all");
+
+		var force = d3.layout.force()
+            .charge(-300).linkDistance(100).size([width, height]);
+
+		d3.json("/graph/"+encodeURIComponent(id), function(json) {
+		  force
+			  .nodes(json.nodes)
+			  .links(json.links)
+			  .start();
+
+		  var link = svg.selectAll(".link")
+			  .data(json.links)
+			.enter().append("line")
+			  .attr("class", "link")
+			.style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+
+		  var node = svg.selectAll(".node")
+			  .data(json.nodes)
+			.enter().append("g")
+			  .attr("class", function(d) {return "node "+d.label})
+			  .call(force.drag);
+
+		  node.append("circle")
+			  .attr("r","20");
+
+		  node.append("text")
+			  .attr("dx", -15)
+			  .attr("dy", ".25em")
+			  .text(function(d) { return d.id });
+
+		  force.on("tick", function() {
+			link.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
+
+			node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+});
+            return false;
+        }
+        function search() {
+            var query=$("#search").find("input[name=search]").val();
+            $.get("/search?q=" + encodeURIComponent(query),
+                    function (data) {
+                        var t = $("table#jaccard tbody").empty();
+                        if (!data || data.length == 0) return;
+                        data.forEach(function (row) {
+                            var avg_jac = row.avg_jac;
+							var min_jac = row.min_jac;
+							var max_jac = row.max_jac;
+                            $("<tr><td class='protein'>" + toFixed(avg_jac,2) + "</td><td>" + toFixed(min_jac,2) + "</td><td>" + toFixed(max_jac,2) + "</td></tr>").appendTo(t)
+                                    .click(function() { showProtein($(this).find("td.protein").text());})
+                        });
+						var t = $("table#general tbody").empty();
+                        if (!data || data.length == 0) return;
+                        data.forEach(function (row) {
+                            var nbProt = row.nbProt;
+							var avgSizeDom = row.avgSizeDom;
+							var avgSizeEC = row.avgSizeEC;
+                            $("<tr><td class='protein'>" + toFixed(nbProt,2) + "</td><td>" + toFixed(avgSizeDom,2) + "</td><td>" + toFixed(avgSizeEC,2) + "</td></tr>").appendTo(t)
+                                    .click(function() { showProtein($(this).find("td.protein").text());})
+                        });
+						console.log("Protein ID : "+data[0].protein.id);
+						showGraph(data[0].protein.id);
+                        showProtein(data[0].protein.id);
+						
+                    }, "json");
+            return false;
+        }
+
+        $("#search").submit(search);
+        search();
+		
+
+    })
+	
+	function toFixed(num, fixed) {
+		var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+		return num.toString().match(re)[0];
+	}
+</script>
+
+</body>
+</html>
