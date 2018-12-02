@@ -1,1 +1,15 @@
-/resources/data/*
+.classpath
+.project
+target
+*.iml
+*.ipr
+.idea
+.classpath
+.project
+
+target
+*.iml
+*.class
+*.jar
+*.pyc
+/bin/
