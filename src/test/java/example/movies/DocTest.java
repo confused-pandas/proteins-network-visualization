@@ -10,8 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * @author mh
- * @since 14.04.16
+ * @author Najib Aghenda / Maxime Guyot / Guillaume Stunault
  */
 public class DocTest {
 

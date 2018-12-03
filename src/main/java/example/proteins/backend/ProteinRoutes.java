@@ -22,12 +22,13 @@ public class ProteinRoutes implements SparkApplication {
 
     public void init() {
         get("/protein/:id", (req, res) -> gson.toJson(service.findProtein(URLDecoder.decode(req.params("id")))));
+        get("/chart/:id", (req, res) -> gson.toJson(service.createChart(URLDecoder.decode(req.params("id")))));
+        System.out.println(gson.toJson(service.createChart(URLDecoder.decode("K9N7C7"))));
         get("/search", (req, res) -> gson.toJson(service.search(req.queryParams("q"))));
         get("/graph/:id", (req, res) -> {
             int limit = req.queryParams("limit") != null ? Integer.valueOf(req.queryParams("limit")) : 100;
 
             return gson.toJson(service.graph(limit, req.params("id")));
         });
-        System.out.println(gson.toJson(service.graph(100, "K9N7C7")));
     }
 }

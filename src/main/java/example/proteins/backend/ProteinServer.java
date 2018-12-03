@@ -6,7 +6,7 @@ import static spark.Spark.setPort;
 import example.proteins.util.Util;
 
 /**
- * @author Najib Aghenda / Maxime Guyot / Guillaume Stunault @since 22.10.13
+ * @author Najib Aghenda / Maxime Guyot / Guillaume Stunault
  */
 public class ProteinServer {
 

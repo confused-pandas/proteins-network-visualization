@@ -3,9 +3,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">
     <title>Neo4j Proteins</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 </head>
 
 <body>
+
 <div id="graph">
 </div>
 <div role="navigation" class="navbar navbar-default navbar-static-top">
@@ -100,6 +103,9 @@
     </div>
     <div class="col-md-6">
     </div>
+    <div class="col-md-6">
+    	<canvas id="myChart" width="400" height="100"></canvas>
+    </div>
 </div>
 <style type="text/css">
 .link {
@@ -151,6 +157,80 @@ fill:#008cc1;
                     }, "json");
             return false;
         }
+        function showChart(id) {
+        	$.get("/chart/" + encodeURIComponent(id),
+                    function (data) {
+                        if (!data) return;
+                        $("#id").text(data.id);
+
+						function jsonParser(stringValue) {
+
+					       var string = JSON.stringify(stringValue);
+					       var objectValue = JSON.parse(string);
+				        return objectValue['jac'];
+					    }
+					    var cat_1 = 0;
+					    var cat_2 = 0;
+					    var cat_3 = 0;
+					    var cat_4 = 0;
+					    var cat_5 = 0;
+					    console.log(jsonParser(data[0]));
+					    for (var iter in data) {
+					    	if (jsonParser(data[iter]) >= 0 && jsonParser(data[iter]) < 0.25) {
+					    		cat_1 ++;
+					    	}
+					    	if (jsonParser(data[iter]) >= 0.25 && jsonParser(data[iter]) < 0.5) {
+					    		cat_2 ++;
+					    	}
+					    	if (jsonParser(data[iter]) >= 0.5 && jsonParser(data[iter]) < 0.75) {
+					    		cat_3 ++;
+					    	}
+					    	if (jsonParser(data[iter]) >= 0.75 && jsonParser(data[iter]) < 1) {
+					    		cat_4 ++;
+					    	}
+					    	if (jsonParser(data[iter]) == 1 ) {
+					    		cat_5 ++;
+					    	}
+					    }
+						
+                        var ctx = document.getElementById("myChart").getContext('2d');
+						var myChart = new Chart(ctx, {
+						    type: 'bar',
+						    data: {
+						        labels: ["[0 - 0.25[", "[0.25 - 0.5[", "[0.5 - 0.75[", "[0.75 - 1[", "{1}"],
+						        datasets: [{
+						            label: 'Jaccard Index',
+						            data: [cat_1, cat_2, cat_3, cat_4, cat_5],
+						            backgroundColor: [
+						                'rgba(255, 99, 132, 0.2)',
+						                'rgba(54, 162, 235, 0.2)',
+						                'rgba(255, 206, 86, 0.2)',
+						                'rgba(75, 192, 192, 0.2)',
+						                'rgba(153, 102, 255, 0.2)',
+						            ],
+						            borderColor: [
+						                'rgba(255,99,132,1)',
+						                'rgba(54, 162, 235, 1)',
+						                'rgba(255, 206, 86, 1)',
+						                'rgba(75, 192, 192, 1)',
+						                'rgba(153, 102, 255, 1)',
+						            ],
+						            borderWidth: 1
+						        }]
+						    },
+						    options: {
+						        scales: {
+						            yAxes: [{
+						                ticks: {
+						                    beginAtZero:true
+						                }
+						            }]
+						        }
+						    }
+						});
+                    }, "json");
+            return false;
+        }
 		function showGraph(id) {
             $.get("/graph/" + encodeURIComponent(id),
                     function (data) {
@@ -159,7 +239,6 @@ fill:#008cc1;
                         var $list = $("#ng").empty();
 
                     function jsonParser(stringValue) {
-
 				       var string = JSON.stringify(stringValue);
 				       var objectValue = JSON.parse(string);
 			        return objectValue['id'];
@@ -252,6 +331,7 @@ fill:#008cc1;
                                     .click(function() { showProtein($(this).find("td.protein").text());})
                         });
 						showGraph(data[0].protein.id);
+						showChart(data[0].protein.id);
                         showProtein(data[0].protein.id);
 						
                     }, "json");
@@ -270,5 +350,10 @@ fill:#008cc1;
 	}
 </script>
 
+
+
 </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 </html>

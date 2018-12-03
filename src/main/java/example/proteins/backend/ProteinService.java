@@ -52,6 +52,15 @@ public class ProteinService {
                 " RETURN protein, avg(r.jaccard) as avg_jac, min(r.jaccard) as min_jac, max(r.jaccard) as max_jac, count(protein) as nbProt, avg(size(protein2.domains)) as avgSizeDom, avg(size(protein2.ec)) as avgSizeEC",
                 map("protID", query)));
     }
+    
+    @SuppressWarnings("unchecked")
+    public Iterable<Map<String,Object>> createChart(String id) {
+        return Iterators.asCollection(cypher.query(
+        		"MATCH (protein:Protein)-[r:weight]-(protein2)" +
+                " WHERE protein.id = {protID} \n" +
+                " RETURN r.jaccard as jac",
+                map("protID", id)));
+    }
 
     @SuppressWarnings("unchecked")
     public Map<String, Object> graph(int limit, String id) {
