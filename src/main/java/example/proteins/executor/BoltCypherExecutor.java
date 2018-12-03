@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Michael Hunger @since 22.10.13
+ * @author Najib Aghenda / Maxime Guyot / Guillaume Stunault
  */
 public class BoltCypherExecutor implements CypherExecutor {
 

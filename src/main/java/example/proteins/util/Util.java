@@ -1,7 +1,7 @@
 package example.proteins.util;
 
 /**
- * @author Michael Hunger @since 22.10.13
+ * @author Najib Aghenda / Maxime Guyot / Guillaume Stunault
  */
 public class Util {
     public static final String DEFAULT_URL = "bolt://neo4j:1234@localhost";

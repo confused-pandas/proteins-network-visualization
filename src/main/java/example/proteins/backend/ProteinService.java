@@ -12,8 +12,7 @@ import java.util.*;
 import static org.neo4j.helpers.collection.MapUtil.map;
 
 /**
- * @author mh
- * @since 30.05.12
+ * @author Najib Aghenda / Maxime Guyot / Guillaume Stunault
  */
 public class ProteinService {
 
@@ -57,7 +56,7 @@ public class ProteinService {
     @SuppressWarnings("unchecked")
     public Map<String, Object> graph(int limit, String id) {
         Iterator<Map<String,Object>> result = cypher.query(
-                "MATCH (protein:Protein)-[a:linked]-(d:Domains)-[b:linked]-(protein2:Protein) " +
+                "MATCH (protein:Protein)-[a:linkedTo]-(d:Domains)-[b:linkedTo]-(protein2:Protein) " +
                 "WHERE protein.id = {id} \n" +
                 " RETURN protein.id as pid, collect(d.value) as ip, protein2.id as p2id " +
                 " LIMIT {limit}", map("limit",limit, "id", id));
